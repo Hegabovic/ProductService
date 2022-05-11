@@ -7,4 +7,12 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'Angular-lab3';
+
+  names:string[]=[
+    "Abdullah",
+    "Ahmed",
+    "Mahmoud",
+    "Hegab",
+    "Hegabovic",
+  ];
 }

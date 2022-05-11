@@ -1,0 +1,148 @@
+<p-dialog header="Add Product" [(visible)]="displayModal" [modal]="true" [style]="{width: '50vw'}"
+          [draggable]="false" [resizable]="false">
+  <div class="container My-form">
+    <div>
+     <span class="p-float-label mt-2 mb-4">
+    <input id="id-input" type="text" pInputText [(ngModel)]="createdProduct.productId"/>
+    <label for="id-input">Product ID</label>
+</span>
+
+      <span class="p-float-label mt-2 mb-4">
+    <input id="name-input" type="text" pInputText [(ngModel)]="createdProduct.productName">
+    <label for="name-input">Product Name</label>
+</span>
+
+      <span class="p-float-label mt-2 mb-4">
+    <input id="code-input" type="text" pInputText [(ngModel)]="createdProduct.productCode">
+    <label for="code-input">Product Code</label>
+</span>
+
+      <span class="p-float-label mt-2 mb-4">
+    <p-inputNumber id="price-input" [(ngModel)]="createdProduct.productPrice" mode="currency" currency="USD"
+                   locale="en-US"></p-inputNumber>
+    <label for="price-input">Price</label>
+    </span>
+
+    </div>
+
+    <div>
+     <span class="p-float-label mt-2 mb-4">
+    <p-calendar [(ngModel)]="createdProduct.productAvailable" dateFormat="MM dd, yy"></p-calendar>
+    <label for="code-input">Date</label>
+    </span>
+      <span class="p-float-label mt-2 mb-4">
+    <input id="img-input" type="text" pInputText [(ngModel)]="createdProduct.productImg"/>
+    <label for="img-input">image</label>
+    </span>
+      <span class="p-float-label mt-2 mb-4">
+     <input id="rate-input" type="text" pInputText [(ngModel)]="createdProduct.productRate"/>
+    <label for="rate-input">Rate</label>
+    </span>
+    </div>
+  </div>
+
+
+  <ng-template pTemplate="footer">
+    <p-button icon="pi pi-check" (click)="addNewProduct();resetField();" label="Ok"
+              styleClass="p-button-text"></p-button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog header="Edit Product" [(visible)]="displayEditModal" [modal]="true" [style]="{width: '50vw'}"
+
+          [draggable]="false" [resizable]="false">
+  <div class="container My-form">
+    <div>
+     <span class="p-float-label mt-2 mb-4">
+    <input id="edit-id-input" type="text" pInputText [(ngModel)]="selectedProduct.productId"/>
+    <label for="edit-id-input">Product ID</label>
+</span>
+
+      <span class="p-float-label mt-2 mb-4">
+    <input id="edit-name-input" type="text" pInputText [(ngModel)]="selectedProduct.productName">
+    <label for="edit-name-input">Product Name</label>
+</span>
+
+      <span class="p-float-label mt-2 mb-4">
+    <input id="edit-code-input" type="text" pInputText [(ngModel)]="selectedProduct.productCode">
+    <label for="edit-code-input">Product Code</label>
+</span>
+
+      <span class="p-float-label mt-2 mb-4">
+    <p-inputNumber id="edit-price-input" [(ngModel)]="selectedProduct.productPrice" mode="currency" currency="USD"
+                   locale="en-US"></p-inputNumber>
+    <label for="edit-price-input">Price</label>
+    </span>
+
+    </div>
+
+    <div>
+     <span class="p-float-label mt-2 mb-4">
+    <p-calendar [(ngModel)]="selectedProduct.productAvailable" dateFormat="MM dd, yy"></p-calendar>
+    <label for="edit-code-input">Date</label>
+    </span>
+      <span class="p-float-label mt-2 mb-4">
+    <input id="edit-img-input" type="text" pInputText [(ngModel)]="selectedProduct.productImg"/>
+    <label for="img-input">image</label>
+    </span>
+      <span class="p-float-label mt-2 mb-4">
+     <input id="edit-rate-input" type="text" pInputText [(ngModel)]="selectedProduct.productRate"/>
+    <label for="rate-input">Rate</label>
+    </span>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button icon="pi pi-check" (click)="saveProduct(selectedProduct.productId);" label="Ok"
+              styleClass="p-button-text"></p-button>
+  </ng-template>
+</p-dialog>
+
+  <table class="table table-hover table-striped">
+    <thead>
+    <tr>
+
+      <th colspan="3">
+      <span class="p-input-icon-left">
+    <i class="pi pi-search"></i>
+         <input type="text" pInputText placeholder="Filter By Name" [(ngModel)]="searchKey"/>
+         </span>
+      </th>
+      <th align="center">
+        <button pButton pRipple (click)="showImage()" type="button" label="Show"
+                class="p-button-raised p-button-secondary"></button>
+        <p-button (click)="showModalDialog()" label="Add" class="m-1"></p-button>
+      </th>
+    </tr>
+
+    <tr align="center">
+      <th>ID</th>
+      <th>product Name</th>
+      <th>code</th>
+      <th>Available</th>
+      <th *ngIf="displayImage">Image</th>
+      <th>Price</th>
+      <th>Rating</th>
+      <th>Options</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr align="center" *ngFor="let product of products | arraySplice :searchKey">
+      <td>{{ product.productId}}</td>
+      <td>{{ product.productName | stringConverter  }}</td>
+      <td>{{ product.productCode | stringConverter}}</td>
+      <td>{{ product.productAvailable | date:'MMMM d, y'}}</td>
+      <td *ngIf="displayImage">{{ product.productImg | stringConverter }}</td>
+      <td>{{ product.productPrice | currency:"USD"}}</td>
+
+      <td>
+        <p-rating [(ngModel)]="product.productRate" [readonly]="true" [stars]="5" [cancel]="false"></p-rating>
+      </td>
+      <td>
+        <button pButton pRipple (click)=" editProduct(product.productId)" type="button" label="Edit"
+                class="p-button-raised p-button-warning"></button>
+        <button pButton pRipple (click)="deleteProduct(product.productId)" type="button" label="Delete"
+                class="p-button-raised p-button-danger"></button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
